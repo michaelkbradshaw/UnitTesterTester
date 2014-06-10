@@ -21,10 +21,9 @@ import glob
 import os.path
 import zipfile
 
-TESTFILE = "TEST_FILE_RUNNING.java"
+TESTFILE = "TEST_FILE_RUNNING.cpp"
 EXECFILE = "EXEC_TEST_FILE"
 TEST_LIB="TEST_LIB"
-#JARS = ["junit-4.11.jar","hamcrest-core-1.3.jar","test1.jar"]
 
 def relink(text,lib):
     
@@ -50,11 +49,13 @@ def createCommandPath(jars):
 
 def runFile(linkedFile):
     #compile command
-    JARS = getJars()
+
+    #JARS = getJars() #JAVA
     compError = False
     message=""
     try:
-        cmd = ['javac','-J-Xmx16m','-cp',createCommandPath(JARS),linkedFile]
+        #cmd = ['javac','-J-Xmx16m','-cp',createCommandPath(JARS),linkedFile] #JAVA
+        cmd = ['g++','-g','-o',EXECFILE ,'-lm','-lutil',linkedFile] #C/C++
         message = subprocess.check_output(cmd,stderr=subprocess.STDOUT)
     except subprocess.CalledProcessError as e:
         compError=True
@@ -67,14 +68,14 @@ def runFile(linkedFile):
 
     #run command
     
-    linkedClass = linkedFile[:linkedFile.rindex('.')]
+    # linkedClass = linkedFile[:linkedFile.rindex('.')] # JAVA
 
 
     message = ""
     success = True
     try:
-        cmd = ['java','-cp',createCommandPath(JARS),'org.junit.runner.JUnitCore',linkedClass]
-
+        #cmd = ['java','-cp',createCommandPath(JARS),'org.junit.runner.JUnitCore',linkedClass] #java
+        cmd = ["valgrind","-q","--error-exitcode=1","--leak-check=yes","./"+EXECFILE]
         message = subprocess.check_output(cmd,stderr=subprocess.STDOUT)
     except subprocess.CalledProcessError as e:
         message = e.output
@@ -123,9 +124,8 @@ def main():
         total = total +1
   
         linkedtext = relink(text,lib)
-        storeText(originFile,linkedtext)
-#        output = str(runFile())
-        success,output = runFile(originFile)
+        storeText(TESTFILE,linkedtext)#for C/Python use alternative path name
+        success,output = runFile(TESTFILE)
         if(str(success)==result):
             correct=correct+1
             print ("passed: "+message)
@@ -137,7 +137,7 @@ def main():
     print("Grade :=>> {0}".format($VPL_GRADEMAX*correct/total))
     if (correct == total):
         print("<|--\nPerfect Score!\n--|>")
-    storeText(originFile,text)
+    #storeText(originFile,text) clean up not needed in C++
 main()
 EOF
 
