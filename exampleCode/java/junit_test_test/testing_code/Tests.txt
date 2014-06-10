@@ -1,0 +1,4 @@
+#file:True or False: message
+person.correct.Person:True:Your tests failed the correct one
+person.wrong.Person:False:Your Setters are not sufficiently tested
+
