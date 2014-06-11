@@ -1,0 +1,2 @@
+Person/correct/initTest.cpp:True:Your tests failed the correct one
+Person/wrong/initTest.cpp:False:Person setters are not properly tested
