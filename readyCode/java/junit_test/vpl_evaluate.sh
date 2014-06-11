@@ -112,7 +112,7 @@ def main():
         print("Grade :=>> {0}".format($VPL_GRADEMAX))
         print("<|--\nPerfect Score!\n--|>")
     else:
-        print("<|--\n{0}\n\nOUTPUT\n\n{1}\n--|>".format(message,output))
+        print("<|--\n{0}\n\nOUTPUT\n\n{1}\n--|>".format("Your code did not pass",output))
   
 
 

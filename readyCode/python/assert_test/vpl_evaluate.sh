@@ -22,7 +22,7 @@ import glob
 import os.path
 import zipfile
 
-TESTFILE = "TEST_FILE_RUNNING.cpp"
+TESTFILE = "TEST_FILE_RUNNING.py"
 EXECFILE = "EXEC_TEST_FILE"
 TEST_LIB="TEST_LIB"
 UNIT_TEST_FILE = "vpl_unit_test.txt"
@@ -45,39 +45,40 @@ def expandZip():
 
 def runFile(sourcefiles,test):
 
-    objs = []
-    for source in sourcefiles:
+    # objs = []
+    # for source in sourcefiles:
 
-        base = source.split('.')[0]
-        obj = base+".o"
-        objs.append(obj)
+    #     base = source.split('.')[0]
+    #     obj = base+".o"
+    #     objs.append(obj)
 
-    message = ""
-    #compile source
-    try:
-           cmd = ['g++','-g','-c','-lm','-lutil',source]
-           message = subprocess.check_output(cmd,stderr=subprocess.STDOUT)
+    # message = ""
+    # #compile source
+    # try:
+    #        cmd = ['g++','-g','-c','-lm','-lutil',source]
+    #        message = subprocess.check_output(cmd,stderr=subprocess.STDOUT)
 
 
-           cmd = ['g++','-g','-o',EXECFILE,'-lm','-lutil',test]+objs
-           message +=subprocess.check_output(cmd,stderr=subprocess.STDOUT)
-    except:
-              print(source+" failed to compile aborting test");
-              message = e.output.decode("utf-8")
-              print("<|--\nUnit Test did not compile,check locally and try again\n\n{0}\n\nOUTPUT\n\n{1}\n--|>".format(cmd,message))
-              raise subprocess.CalledProcessError("Does not compile")
+    #        cmd = ['g++','-g','-o',EXECFILE,'-lm','-lutil',test]+objs
+    #        message +=subprocess.check_output(cmd,stderr=subprocess.STDOUT)
+    # except:
+    #           print(source+" failed to compile aborting test");
+    #           message = e.output.decode("utf-8")
+    #           print("<|--\nUnit Test did not compile,check locally and try again\n\n{0}\n\nOUTPUT\n\n{1}\n--|>".format(cmd,message))
+    #           raise subprocess.CalledProcessError("Does not compile")
               
 
         
 
 
-    #run command
+    #Run command
     
 
     message=""
     success = True
     try:
-       cmd = ["valgrind","-q","--leak-check=full","--error-exitcode=1","./"+EXECFILE]
+       #cmd = ["valgrind","-q","--leak-check=full","--error-exitcode=1","./"+EXECFILE]
+       cmd = ["python3",test]
 
        message = subprocess.check_output(cmd,stderr=subprocess.STDOUT)
     except subprocess.CalledProcessError as e:
@@ -98,6 +99,7 @@ def main():
         if(f.endswith("cpp") or f.endswith(".c") or f.endswith(".C")):
             sourcefiles.append(f)
 
+
     expandZip()
 
 
@@ -107,7 +109,7 @@ def main():
         print("Grade :=>> {0}".format($VPL_GRADEMAX))
         print("<|--\nPerfect Score!\n--|>")
     else:
-        print("<|--\n{0}\n\nOUTPUT\n\n{1}\n--|>".format("Your Code did not pass",output))
+        print("<|--\n{0}\n\nOUTPUT\n\n{1}\n--|>".format("Your code did not pass",output))
     
 
 
